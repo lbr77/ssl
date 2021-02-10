@@ -4,12 +4,12 @@ node_js:
   - "10"
 install:
   - npm i
-  - git clone https://github.com/ChenYFan/CheckSSL --depth=2
+  - git clone https://github.com/lbr77/CheckSSL --depth=2
 script:
   - npm run build
   - cd CheckSSL
   - chmod +x checker.sh
-  - ./checker.sh blog.stevelbr.top tools.stevelbr.top
+  - ./checker.sh blog.stevelbr.top tools.stevelbr.top ssl.stevelbr.top
   - cp -rf ./output/ct.json ../public/ct.json
   - echo "ssl.stevelbr.top" > ../public/CNAME
 branches:
