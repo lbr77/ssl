@@ -12,9 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Setup Node.js
+        uses: actions/setup-node@v1
         with:
-          node-version: 10.x
-        uses: actions/setup_node@v1
+          node-version: '10'
       - name: Install Node Packages and Downloading Scripts
         run: |
           npm i
