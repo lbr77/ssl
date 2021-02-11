@@ -1,0 +1,41 @@
+name: Build SSL Checker
+on:
+  push:
+    branches: 
+      - master
+  schedule:
+      - cron: '0 16 * * *'
+  
+jobs:
+  Install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - name: Setup Node.js
+        with:
+          node-version: 10.x
+        uses: actions/setup_node@v2.1.4
+      - name: Install Node Packages and Downloading Scripts
+        run: |
+          npm i
+          npm build
+          wget https://cdn.jsdelivr.net/gh/ChenYFan/CheckSSL@master/checker.sh -O ./checker.sh
+          wget https://cdn.jsdelivr.net/gh/ChenYFan/CheckSSL@master/runcheck.sh -O ./runcheck.sh
+          chmod +x checker.sh
+      - name: Build
+        run: |
+          ./checker.sh $SERVERS
+          cp -rf ./output/ct.json ./public/ct.json
+          echo $DOMAIN > ./public/CNAME
+        env:
+          SERVERS: ${{secrets.SERVERS}}
+          DOMAIN: ${{secrets.DOMAIN}}
+      - name: Post Changes
+        run: |
+          cd ./public
+          git init
+          git add *.*
+          git commit -m "Update SSL status via Github Actions"
+          git checkout -b gh-pages
+          git add remote origin $REMOTE_REPO
+          git push -u -f origin gh-pages
