@@ -7,14 +7,14 @@ on:
       - cron: '0 16 * * *'
   
 jobs:
-  Install:
+  Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2
       - name: Setup Node.js
         with:
           node-version: 10.x
-        uses: actions/setup_node@v2.1.4
+        uses: actions/setup_node@v2
       - name: Install Node Packages and Downloading Scripts
         run: |
           npm i
@@ -30,12 +30,17 @@ jobs:
         env:
           SERVERS: ${{secrets.SERVERS}}
           DOMAIN: ${{secrets.DOMAIN}}
-      - name: Post Changes
+      - name: Commit Changes
         run: |
           cd ./public
           git init
-          git add *.*
-          git commit -m "Update SSL status via Github Actions"
-          git checkout -b gh-pages
-          git add remote origin $REMOTE_REPO
-          git push -u -f origin gh-pages
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff-index --quiet HEAD || git commit -m "Update SSL status via Github Actions"
+      - name: Push Changes
+        uses: ad-m/github-push-action@master
+        with: 
+          github_actions: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          force: true
