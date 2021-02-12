@@ -19,8 +19,8 @@ jobs:
         run: |
           npm i
           npm build
-          wget https://cdn.jsdelivr.net/gh/ChenYFan/CheckSSL@master/checker.sh -O ./checker.sh
-          wget https://cdn.jsdelivr.net/gh/ChenYFan/CheckSSL@master/runcheck.sh -O ./runcheck.sh
+          wget https://cdn.jsdelivr.net/gh/lbr77/CheckSSL@master/checker.sh -O ./checker.sh
+          wget https://cdn.jsdelivr.net/gh/lbr77/CheckSSL@master/runcheck.sh -O ./runcheck.sh
           chmod +x checker.sh
       - name: Build
         run: |
