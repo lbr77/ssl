@@ -25,7 +25,6 @@ jobs:
         run: |
           npm run build
           ./checker.sh $SERVERS
-          cp -rf ./output/ct.json ./public/ct.json
           echo $DOMAIN > ./public/CNAME
         env:
           SERVERS: ${{secrets.SERVERS}}
